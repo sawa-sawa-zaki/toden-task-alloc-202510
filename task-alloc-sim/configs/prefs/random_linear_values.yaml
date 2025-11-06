@@ -1,0 +1,4 @@
+prefs:
+  type: "json_linear_values"
+  path: "data/raw/valuations_2x2_sample.json"  # ← ここを編集すればOK
+  allow_ties: true

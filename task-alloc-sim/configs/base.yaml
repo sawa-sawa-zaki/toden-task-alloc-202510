@@ -1,0 +1,10 @@
+pipeline: ["rsd_initial_global", "ttc_adjust_by_t"]
+time_horizon: 2
+repeats: 5
+seed: 123
+output_dir: results/runs
+log_interval: 10
+save_plots: false
+
+market_defaults:
+  units_demand: 2

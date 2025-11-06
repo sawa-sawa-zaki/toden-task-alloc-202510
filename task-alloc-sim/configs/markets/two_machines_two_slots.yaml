@@ -1,0 +1,19 @@
+market:
+  num_agents: 3
+  num_machines: 2
+  time_horizon: 2
+  units_demand: 2
+
+  # 事前の供給予測（各時刻の総タスク数）
+  supply_forecast_by_t: [4, 4]
+
+  # バッファ（各時刻）：RSDでは使用しない
+  buffer_by_t: [1, 1]
+
+  # ★ マシン別キャパ（時間帯に依らず一定）
+  machine_capacity: [3, 2]   # 例：A=3枠, B=2枠
+
+  # 実行直前の変動（±）：各時刻の総タスク数の差分
+  supply_shock_by_t:
+    - {t: 0, delta: -1}
+    - {t: 1, delta: +2}

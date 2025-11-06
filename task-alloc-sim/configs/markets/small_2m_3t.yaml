@@ -1,0 +1,12 @@
+market:
+  num_agents: 8
+  num_machines: 2
+  time_horizon: 3
+  units_demand: 2
+  capacity:
+    - [2, 2, 2]   # machine 0 の各時刻の席数
+    - [2, 2, 2]   # machine 1 の各時刻の席数
+  supply_shock:
+    # 供給変動の例（任意）：tとmachineをキーに増減（TTC調整のトリガ）
+    # - {t: 1, machine: 0, delta: -1}
+    # - {t: 2, machine: 1, delta: +1}

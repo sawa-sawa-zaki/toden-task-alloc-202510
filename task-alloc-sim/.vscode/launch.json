@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run experiment",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/run.py",
+      "args": [
+        "--config",
+        "configs/runs/rsd_then_ttc_baseline.yaml"
+      ]
+    }
+  ]
+}

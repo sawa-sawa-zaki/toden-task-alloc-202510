@@ -1,0 +1,7 @@
+include:
+  - configs/base.yaml
+  - configs/markets/two_machines_two_slots.yaml
+  - configs/prefs/random_linear_values.yaml
+overrides:
+  repeats: 1   # 一時的に1回だけ回したいなら 1 に
+  seed: 42
