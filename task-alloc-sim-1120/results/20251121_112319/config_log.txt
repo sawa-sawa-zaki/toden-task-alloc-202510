@@ -1,0 +1,19 @@
+=== Simulation Configuration ===
+Timestamp: 20251121_112319
+
+[Market Config]
+A: 2
+M: 2
+T: 3
+WINDOW: 2
+MACHINE_CAPACITY: 20
+Q: [20, 20]
+BASE_SUPPLY: [10, 10, 10]
+BUFFER: [5, 5, 5]
+SHOCK_PROB: {-5: 0.25, 0: 0.55, 5: 0.25}
+
+[IC Config]
+SAMPLES: 50
+SEED: 42
+MAX_PROFILES: None
+OUTPUT_BASE_DIR: results
