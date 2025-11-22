@@ -1,0 +1,75 @@
+📝 Saving debug log to: results_debug/20251121_163502/debug_log.txt
+🔧 Setting up Config...
+  Supply: [4, 4, 4], Buffer: [1, 1, 1], Demand: [5, 5]
+
+🎲 Generating Preferences...
+
+👤 Agent A (Type ID: 81)
+  Ranks (A1, B1, A2, B2, A3, B3): (1, 0, 1, 2, 3, 3)
+  Value Matrix:
+[[ 100.  100.    1.]
+ [1000.   10.    1.]]
+
+👤 Agent B (Type ID: 14)
+  Ranks (A1, B1, A2, B2, A3, B3): (0, 0, 1, 0, 2, 1)
+  Value Matrix:
+[[100.  10.   1.]
+ [100. 100.  10.]]
+
+============================================================
+🛠 MECHANISM DEBUG RUN START (T=3, Window=2)
+============================================================
+
+⚡ [Step 0] Shock Generation
+  Time 0: Shock = -2 (Supply: 4 -> 2)
+  Time 1: Shock = -2 (Supply: 4 -> 2)
+  Time 2: Shock = +0 (Supply: 4 -> 4)
+
+🕒 [Time 0] Processing...
+  🔹 Phase A: Window RSD (Window: 0 ~ 1)
+     Agent Priority Order: [1, 0]
+     Agent 1 took 5 units. (Remaining Demand: 0)
+     Agent 0 took 1 units. (Remaining Demand: 4)
+  🔸 Phase B: Adjustment (Real Cap: 2)
+     Current Usage at T=0: 3 / 2
+     ⚠️ Eviction Triggered! Removing 1 units...
+       Evicted Unit 1 (Agent 1): Failed (No space)
+
+🕒 [Time 1] Processing...
+  🔹 Phase A: Window RSD (Window: 1 ~ 2)
+     Agent Priority Order: [0, 1]
+     Agent 0 took 3 units. (Remaining Demand: 1)
+     Agent 1 took 0 units. (Remaining Demand: 1)
+  🔸 Phase B: Adjustment (Real Cap: 2)
+     Current Usage at T=1: 3 / 2
+     ⚠️ Eviction Triggered! Removing 1 units...
+       Evicted Unit 1 (Agent 1): Failed (No space)
+
+🕒 [Time 2] Processing...
+  🔹 Phase A: Window RSD (Window: 2 ~ 2)
+     Agent Priority Order: [1, 0]
+     Agent 1 took 0 units. (Remaining Demand: 2)
+     Agent 0 took 0 units. (Remaining Demand: 1)
+  🔸 Phase B: Adjustment (Real Cap: 4)
+     Current Usage at T=2: 3 / 4
+     ✨ Promotion Triggered! Filling vacancies...
+       Promoted 1 units.
+
+============================================================
+🏁 FINAL RESULTS
+============================================================
+
+📦 Final Allocation (Agent A):
+[[0 1 3]
+ [0 0 0]]
+💰 Utility A: 103.00
+
+📦 Final Allocation (Agent B):
+[[2 0 0]
+ [0 1 1]]
+💰 Utility B: 310.00
+
+Stats:
+  Total Units Allocated: 8
+  Demand Fulfillment A: 4/5
+  Demand Fulfillment B: 4/5

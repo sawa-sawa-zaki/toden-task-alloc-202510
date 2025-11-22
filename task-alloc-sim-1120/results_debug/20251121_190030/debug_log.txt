@@ -1,0 +1,75 @@
+📝 Saving debug log to: results_debug/20251121_190030/debug_log.txt
+🔧 Loading Config from src/config.py ...
+  Agents: 2, Machines: 2, TimeSteps: 3
+  Supply: [10, 10, 10]
+  Buffer: [2, 2, 2]
+  Demand: [20, 20]
+  Machine Cap: 20
+  Shock Prob: {-5: 0.25, 0: 0.5, 5: 0.25}
+
+🎲 Generating Preferences...
+
+👤 Agent A (Type 81)
+[[ 100.  100.    1.]
+ [1000.   10.    1.]]
+
+👤 Agent B (Type 14)
+[[100.  10.   1.]
+ [100. 100.  10.]]
+
+============================================================
+🛠 MECHANISM DEBUG RUN START (T=3, Window=2)
+============================================================
+
+⚡ [Step 0] Shock Generation
+  Time 0: Shock = -5 (Supply: 10 -> 5)
+  Time 1: Shock = -5 (Supply: 10 -> 5)
+  Time 2: Shock = +0 (Supply: 10 -> 10)
+
+🕒 [Time 0] Processing...
+  🔹 Phase A: Window RSD (Window: 0 ~ 1)
+     Agent Priority Order: [1, 0]
+     Agent 1 took 16 units. (Remaining Demand: 4)
+     Agent 0 took 0 units. (Remaining Demand: 20)
+  🔸 Phase B: Adjustment (Real Cap: 5)
+     Current Usage at T=0: 8 / 5
+     ⚠️ Eviction Triggered! Removing 3 units...
+       Evicted Unit 1 (Agent 1): Failed (No space)
+       Evicted Unit 2 (Agent 1): Failed (No space)
+       Evicted Unit 3 (Agent 1): Failed (No space)
+
+🕒 [Time 1] Processing...
+  🔹 Phase A: Window RSD (Window: 1 ~ 2)
+     Agent Priority Order: [1, 0]
+     Agent 1 took 7 units. (Remaining Demand: 0)
+     Agent 0 took 1 units. (Remaining Demand: 19)
+  🔸 Phase B: Adjustment (Real Cap: 5)
+     Current Usage at T=1: 8 / 5
+     ⚠️ Eviction Triggered! Removing 3 units...
+       Evicted Unit 1 (Agent 1): Failed (No space)
+       Evicted Unit 2 (Agent 1): Failed (No space)
+       Evicted Unit 3 (Agent 1): Failed (No space)
+
+🕒 [Time 2] Processing...
+  🔹 Phase A: Window RSD (Window: 2 ~ 2)
+     Agent Priority Order: [0, 1]
+     Agent 0 took 0 units. (Remaining Demand: 19)
+     Agent 1 took 0 units. (Remaining Demand: 3)
+  🔸 Phase B: Adjustment (Real Cap: 10)
+     Current Usage at T=2: 8 / 10
+     ✨ Promotion Triggered! Filling vacancies...
+       Promoted 2 units.
+
+============================================================
+🏁 FINAL RESULTS
+============================================================
+
+📦 Final Allocation (Agent A) Sum=2:
+[[0 0 2]
+ [0 0 0]]
+💰 Utility A: 2.00
+
+📦 Final Allocation (Agent B) Sum=18:
+[[5 0 0]
+ [0 5 8]]
+💰 Utility B: 1080.00

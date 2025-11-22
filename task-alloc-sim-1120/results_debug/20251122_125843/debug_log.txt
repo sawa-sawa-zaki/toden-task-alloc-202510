@@ -1,0 +1,70 @@
+📝 Saving debug log to: results_debug/20251122_125843/debug_log.txt
+🔧 Loading Config from src/config.py ...
+🎲 Random Seed for this run: 691180
+  Agents: 2, Machines: 2, TimeSteps: 3
+  Supply: [10, 10, 10]
+  Buffer: [2, 2, 2]
+  Demand: [20, 20]
+  Machine Cap: 10
+  Shock Prob: {-5: 0.008812229292562285, -4: 0.027143577143479373, -3: 0.06511405659938267, -2: 0.1216490730138096, -1: 0.1769983568313557, 0: 0.20056541423882085, 1: 0.1769983568313557, 2: 0.1216490730138096, 3: 0.06511405659938267, 4: 0.027143577143479373, 5: 0.008812229292562285}
+
+🎲 Generating Preferences...
+
+👤 Agent A (Type 45)
+[[1000.  100.   10.]
+ [1000.  100.    1.]]
+
+👤 Agent B (Type 197)
+[[1.e+03 1.e+02 1.e+00]
+ [1.e+04 1.e+01 1.e+01]]
+
+============================================================
+🛠 MECHANISM DEBUG RUN START (T=3, Window=2)
+============================================================
+
+⚡ [Step 0] Shock Generation
+  Time 0: Shock = -2 (Supply: 10 -> 8)
+  Time 1: Shock = -1 (Supply: 10 -> 9)
+  Time 2: Shock = -2 (Supply: 10 -> 8)
+
+🕒 [Time 0] Processing...
+  🔹 Phase A: Window RSD (Window: 0 ~ 1)
+     Agent Priority Order: [0, 1]
+     Agent 0 took 16 units. (Remaining Demand: 4)
+     Agent 1 took 0 units. (Remaining Demand: 20)
+  🔸 Phase B: Adjustment (Real Cap: 8)
+     Current Usage at T=0: 8 / 8
+     ✅ Supply/Demand Balanced. No changes.
+
+🕒 [Time 1] Processing...
+  🔹 Phase A: Window RSD (Window: 1 ~ 2)
+     Agent Priority Order: [1, 0]
+     Agent 1 took 8 units. (Remaining Demand: 12)
+     Agent 0 took 0 units. (Remaining Demand: 4)
+  🔸 Phase B: Adjustment (Real Cap: 9)
+     Current Usage at T=1: 8 / 9
+     ✨ Promotion Triggered! Filling vacancies...
+       Promoted 1 units.
+
+🕒 [Time 2] Processing...
+  🔹 Phase A: Window RSD (Window: 2 ~ 2)
+     Agent Priority Order: [0, 1]
+     Agent 0 took 0 units. (Remaining Demand: 4)
+     Agent 1 took 0 units. (Remaining Demand: 11)
+  🔸 Phase B: Adjustment (Real Cap: 8)
+     Current Usage at T=2: 8 / 8
+     ✅ Supply/Demand Balanced. No changes.
+
+============================================================
+🏁 FINAL RESULTS
+============================================================
+
+📦 Final Allocation (Agent A) Sum=16:
+[[8 8 0]
+ [0 0 0]]
+💰 Utility A: 8800.00
+
+📦 Final Allocation (Agent B) Sum=9:
+[[0 1 0]
+ [0 0 8]]
+💰 Utility B: 180.00

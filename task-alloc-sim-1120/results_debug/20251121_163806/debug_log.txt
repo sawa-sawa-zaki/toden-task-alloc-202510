@@ -1,0 +1,69 @@
+📝 Saving debug log to: results_debug/20251121_163806/debug_log.txt
+🔧 Loading Config from src/config.py ...
+  Agents: 2, Machines: 2, TimeSteps: 3
+  Supply: [10, 10, 10]
+  Buffer: [5, 5, 5]
+  Demand: [20, 20]
+  Machine Cap: 20
+  Shock Prob: {-5: 0.25, 0: 0.5, 5: 0.25}
+
+🎲 Generating Preferences...
+
+👤 Agent A (Type 81)
+[[ 100.  100.    1.]
+ [1000.   10.    1.]]
+
+👤 Agent B (Type 14)
+[[100.  10.   1.]
+ [100. 100.  10.]]
+
+============================================================
+🛠 MECHANISM DEBUG RUN START (T=3, Window=2)
+============================================================
+
+⚡ [Step 0] Shock Generation
+  Time 0: Shock = -5 (Supply: 10 -> 5)
+  Time 1: Shock = -5 (Supply: 10 -> 5)
+  Time 2: Shock = +0 (Supply: 10 -> 10)
+
+🕒 [Time 0] Processing...
+  🔹 Phase A: Window RSD (Window: 0 ~ 1)
+     Agent Priority Order: [1, 0]
+     Agent 1 took 10 units. (Remaining Demand: 10)
+     Agent 0 took 0 units. (Remaining Demand: 20)
+  🔸 Phase B: Adjustment (Real Cap: 5)
+     Current Usage at T=0: 5 / 5
+     ✅ Supply/Demand Balanced. No changes.
+
+🕒 [Time 1] Processing...
+  🔹 Phase A: Window RSD (Window: 1 ~ 2)
+     Agent Priority Order: [1, 0]
+     Agent 1 took 5 units. (Remaining Demand: 5)
+     Agent 0 took 0 units. (Remaining Demand: 20)
+  🔸 Phase B: Adjustment (Real Cap: 5)
+     Current Usage at T=1: 5 / 5
+     ✅ Supply/Demand Balanced. No changes.
+
+🕒 [Time 2] Processing...
+  🔹 Phase A: Window RSD (Window: 2 ~ 2)
+     Agent Priority Order: [0, 1]
+     Agent 0 took 0 units. (Remaining Demand: 20)
+     Agent 1 took 0 units. (Remaining Demand: 5)
+  🔸 Phase B: Adjustment (Real Cap: 10)
+     Current Usage at T=2: 5 / 10
+     ✨ Promotion Triggered! Filling vacancies...
+       Promoted 5 units.
+
+============================================================
+🏁 FINAL RESULTS
+============================================================
+
+📦 Final Allocation (Agent A) Sum=3:
+[[0 0 3]
+ [0 0 0]]
+💰 Utility A: 3.00
+
+📦 Final Allocation (Agent B) Sum=17:
+[[5 0 0]
+ [0 5 7]]
+💰 Utility B: 1070.00
