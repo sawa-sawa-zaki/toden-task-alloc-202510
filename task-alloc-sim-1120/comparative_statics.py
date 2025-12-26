@@ -17,42 +17,34 @@ from src.generator import (
     ranks_to_matrix,
     classify_lie_type
 )
-# from src.solver import get_exact_expected_utility # ★削除: ソルバーは使わない
-from src.mechanism import run_online_mechanism    # ★追加: 直接シミュレーションする
+from src.mechanism import run_online_mechanism
 
 # --- 実験設定 ---
-SAMPLE_SIZE = 20          
-MC_SAMPLES = 30           # ★追加: モンテカルロ試行回数 (30~50で十分傾向は見える)
+# SAMPLE_SIZE は廃止（全探索のため）
 DEFAULT_DEMAND = [20, 20]
 DEFAULT_SUPPLY = 10
 DEFAULT_BUFFER = 5
 DEFAULT_SHOCK_MAG = 5
 STRATEGY_MODE = "RESTRICTED"
+MC_SAMPLES = 30 # モンテカルロ試行回数 (30回平均)
 
-# ★新規追加: モンテカルロ法でEUを計算するヘルパー関数
 def calculate_eu_monte_carlo(cfg, report_vals, true_vals_a, true_vals_b, samples, seed_base):
-    """
-    シミュレーションを複数回行って平均利得(EU)を出す
-    """
     total_u_a = 0.0
-    
-    # シードを固定して再現性を担保しつつ、試行ごとにランダム性を出す
-    # (Configが変わっても同じ乱数列を使うことで比較可能性を高める)
     for i in range(samples):
         rng = random.Random(seed_base + i)
         alloc = run_online_mechanism(cfg, report_vals, rng)
-        
-        # Agent Aの利得だけ計算すればよい
         u_a = np.sum(alloc[0] * true_vals_a)
         total_u_a += u_a
-        
     return total_u_a / samples
 
 def run_experiment_scenario(true_types, strategy_types, true_matrices, strategy_matrices, target_profiles, variable_name, range_values):
     results = []
-    print(f"--- Experiment: Varying {variable_name} (Mode: {STRATEGY_MODE}, MC={MC_SAMPLES}) ---")
+    print(f"--- Experiment: Varying {variable_name} (Mode: {STRATEGY_MODE}) ---")
     
-    for val in tqdm(range_values, desc=f"Simulating {variable_name}"):
+    # プロファイル数が多いため、外側のループ(パラメータ変化)ごとに進捗を表示
+    for val in range_values:
+        print(f"Simulating {variable_name} = {val} ...")
+        
         supply = DEFAULT_SUPPLY
         buffer = DEFAULT_BUFFER
         shock_mag = DEFAULT_SHOCK_MAG
@@ -80,25 +72,24 @@ def run_experiment_scenario(true_types, strategy_types, true_matrices, strategy_
         count_type_a = 0
         count_type_b = 0
         
-        # 乱数シードのベース (パラメータごとに変えない方がノイズが減る)
         seed_base = 1000
         
-        for r_a, r_b in target_profiles:
+        # ★全プロファイルループ (46656回)
+        # 計算時間が長いため、ここを tqdm でラップして進捗可視化
+        for r_a, r_b in tqdm(target_profiles, desc=f"  Processing Profiles ({val})", leave=False):
             vals_a = true_matrices[r_a]
             vals_b = true_matrices[r_b]
             report_truth = np.stack([vals_a, vals_b])
             
-            # 1. 正直申告のEU (モンテカルロ)
+            # 1. 正直申告
             eu_truth_a = calculate_eu_monte_carlo(cfg, report_truth, vals_a, vals_b, MC_SAMPLES, seed_base)
             
             max_eu_lie = -float('inf')
             best_lie_idx = -1
             
-            # 2. 嘘の最大探索
+            # 2. 嘘の探索
             for idx_lie, vals_lie in enumerate(strategy_matrices):
                 report_lie = np.stack([vals_lie, vals_b])
-                
-                # 同じシードセットを使って比較する (分散低減法)
                 eu_lie_a = calculate_eu_monte_carlo(cfg, report_lie, vals_a, vals_b, MC_SAMPLES, seed_base)
                 
                 if eu_lie_a > max_eu_lie:
@@ -114,15 +105,20 @@ def run_experiment_scenario(true_types, strategy_types, true_matrices, strategy_
                 if v_type == "Type A": count_type_a += 1
                 elif v_type == "Type B": count_type_b += 1
         
+        # 統計記録
+        total_profiles = len(target_profiles)
+        print(f"  Violations: {count_total}/{total_profiles} (A:{count_type_a}, B:{count_type_b})")
+        
         results.append({
             "parameter": val,
             "violation_total": count_total,
             "violation_type_a": count_type_a,
             "violation_type_b": count_type_b
         })
+        
     return pd.DataFrame(results)
 
-def plot_results(df, x_label, title, filename, output_dir):
+def plot_results(df, x_label, title, filename, output_dir, total_samples):
     plt.figure(figsize=(8, 5))
     plt.plot(df["parameter"], df["violation_total"], marker='o', label="Total", color='black', linewidth=2)
     plt.plot(df["parameter"], df["violation_type_a"], marker='x', label="Type A (Tie-Break)", color='blue', linestyle='--')
@@ -130,7 +126,7 @@ def plot_results(df, x_label, title, filename, output_dir):
     
     plt.title(title + f" ({STRATEGY_MODE})")
     plt.xlabel(x_label)
-    plt.ylabel(f"Violations (out of {SAMPLE_SIZE})")
+    plt.ylabel(f"Violations (out of {total_samples})")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -161,33 +157,42 @@ def main():
     strategy_matrices = [ranks_to_matrix(pt['ranks']) for pt in strategy_types]
     print(f"Truth: {len(true_types)}, Strategy: {len(strategy_types)}")
 
-    # サンプリング
-    random.seed(42)
+    # 2. 全ペア生成 (ここを変更)
     all_truth_indices = list(range(len(true_types)))
-    all_pairs = list(itertools.product(all_truth_indices, repeat=2))
+    # itertools.product で全組み合わせを作成 (216 * 216 = 46656通り)
+    target_profiles = list(itertools.product(all_truth_indices, repeat=2))
     
-    if len(all_pairs) > SAMPLE_SIZE:
-        target_profiles = random.sample(all_pairs, SAMPLE_SIZE)
-    else:
-        target_profiles = all_pairs
-        
-    print(f"Target Profiles: {len(target_profiles)} pairs")
+    print(f"Target Profiles: {len(target_profiles)} pairs (Full Exhaustive Search)")
+    print("⚠️ This will take a long time. Please wait...")
 
-    # Experiments
+    # --- Experiments ---
+    
+    # 1. Supply: [1, 5, 10, 15, 20]
     supply_range = [1, 5, 10, 15, 20]
-    df = run_experiment_scenario(true_types, strategy_types, true_matrices, strategy_matrices, target_profiles, "Supply", supply_range)
+    df = run_experiment_scenario(
+        true_types, strategy_types, true_matrices, strategy_matrices, 
+        target_profiles, "Supply", supply_range
+    )
     df.to_csv(os.path.join(output_dir, "exp1_supply.csv"), index=False)
-    plot_results(df, "Supply", "Effect of Supply", "exp1_supply.png", output_dir)
+    plot_results(df, "Supply", "Effect of Supply", "exp1_supply.png", output_dir, len(target_profiles))
 
+    # 2. Buffer: [0, 2, 4, 6, 8, 10]
     buffer_range = [0, 2, 4, 6, 8, 10]
-    df = run_experiment_scenario(true_types, strategy_types, true_matrices, strategy_matrices, target_profiles, "Buffer", buffer_range)
+    df = run_experiment_scenario(
+        true_types, strategy_types, true_matrices, strategy_matrices, 
+        target_profiles, "Buffer", buffer_range
+    )
     df.to_csv(os.path.join(output_dir, "exp2_buffer.csv"), index=False)
-    plot_results(df, "Buffer", "Effect of Buffer", "exp2_buffer.png", output_dir)
+    plot_results(df, "Buffer", "Effect of Buffer", "exp2_buffer.png", output_dir, len(target_profiles))
 
+    # 3. Shock: [0, 2, 4, 6, 8, 10]
     shock_range = [0, 2, 4, 6, 8, 10]
-    df = run_experiment_scenario(true_types, strategy_types, true_matrices, strategy_matrices, target_profiles, "Shock", shock_range)
+    df = run_experiment_scenario(
+        true_types, strategy_types, true_matrices, strategy_matrices, 
+        target_profiles, "Shock", shock_range
+    )
     df.to_csv(os.path.join(output_dir, "exp3_shock.csv"), index=False)
-    plot_results(df, "Shock", "Effect of Shock", "exp3_shock.png", output_dir)
+    plot_results(df, "Shock", "Effect of Shock", "exp3_shock.png", output_dir, len(target_profiles))
 
     print("Done.")
 

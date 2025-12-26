@@ -1,0 +1,6 @@
+parameter,violation_total,violation_type_a,violation_type_b,avg_utility
+1,0,0,0,70970.677
+5,174,14,160,303156.925
+10,708,5,677,618656.878
+15,832,11,796,914615.311
+20,798,7,775,1184309.0695

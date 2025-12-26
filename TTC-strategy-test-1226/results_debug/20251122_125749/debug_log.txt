@@ -1,0 +1,72 @@
+📝 Saving debug log to: results_debug/20251122_125749/debug_log.txt
+🔧 Loading Config from src/config.py ...
+🎲 Random Seed for this run: 108839
+  Agents: 2, Machines: 2, TimeSteps: 3
+  Supply: [10, 10, 10]
+  Buffer: [5, 5, 5]
+  Demand: [20, 20]
+  Machine Cap: 10
+  Shock Prob: {-5: 0.008812229292562285, -4: 0.027143577143479373, -3: 0.06511405659938267, -2: 0.1216490730138096, -1: 0.1769983568313557, 0: 0.20056541423882085, 1: 0.1769983568313557, 2: 0.1216490730138096, 3: 0.06511405659938267, 4: 0.027143577143479373, 5: 0.008812229292562285}
+
+🎲 Generating Preferences...
+
+👤 Agent A (Type 41)
+[[100.  10.   1.]
+ [100.  10.  10.]]
+
+👤 Agent B (Type 69)
+[[1.e+04 1.e+02 1.e+01]
+ [1.e+04 1.e+03 1.e+00]]
+
+============================================================
+🛠 MECHANISM DEBUG RUN START (T=3, Window=2)
+============================================================
+
+⚡ [Step 0] Shock Generation
+  Time 0: Shock = -2 (Supply: 10 -> 8)
+  Time 1: Shock = -2 (Supply: 10 -> 8)
+  Time 2: Shock = +3 (Supply: 10 -> 13)
+
+🕒 [Time 0] Processing...
+  🔹 Phase A: Window RSD (Window: 0 ~ 1)
+     Agent Priority Order: [1, 0]
+     Agent 1 took 10 units. (Remaining Demand: 10)
+     Agent 0 took 0 units. (Remaining Demand: 20)
+  🔸 Phase B: Adjustment (Real Cap: 8)
+     Current Usage at T=0: 5 / 8
+     ✨ Promotion Triggered! Filling vacancies...
+       Promoted 3 units.
+
+🕒 [Time 1] Processing...
+  🔹 Phase A: Window RSD (Window: 1 ~ 2)
+     Agent Priority Order: [0, 1]
+     Agent 0 took 5 units. (Remaining Demand: 14)
+     Agent 1 took 0 units. (Remaining Demand: 8)
+  🔸 Phase B: Adjustment (Real Cap: 8)
+     Current Usage at T=1: 5 / 8
+     ✨ Promotion Triggered! Filling vacancies...
+       Promoted 3 units.
+
+🕒 [Time 2] Processing...
+  🔹 Phase A: Window RSD (Window: 2 ~ 2)
+     Agent Priority Order: [0, 1]
+     Agent 0 took 0 units. (Remaining Demand: 12)
+     Agent 1 took 0 units. (Remaining Demand: 7)
+  🔸 Phase B: Adjustment (Real Cap: 13)
+     Current Usage at T=2: 5 / 13
+     ✨ Promotion Triggered! Filling vacancies...
+       Promoted 8 units.
+
+============================================================
+🏁 FINAL RESULTS
+============================================================
+
+📦 Final Allocation (Agent A) Sum=12:
+[[1 2 0]
+ [0 0 9]]
+💰 Utility A: 210.00
+
+📦 Final Allocation (Agent B) Sum=17:
+[[7 0 4]
+ [0 6 0]]
+💰 Utility B: 76040.00

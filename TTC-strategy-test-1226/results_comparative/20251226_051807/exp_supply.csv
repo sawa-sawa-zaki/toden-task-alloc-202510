@@ -1,0 +1,6 @@
+parameter,violation_total,violation_type_a,violation_type_b
+1,0,0,0
+5,0,0,0
+10,29700,0,28956
+15,22056,278,20074
+20,24052,3,23186

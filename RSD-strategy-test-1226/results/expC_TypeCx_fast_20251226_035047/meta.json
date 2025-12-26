@@ -1,0 +1,46 @@
+{
+  "Config": {
+    "A": 2,
+    "M": 2,
+    "T": 3,
+    "WINDOW": 2,
+    "MACHINE_CAPACITY": 10,
+    "STRATEGY_DOMAIN": "RESTRICTED",
+    "Q": [
+      20,
+      20
+    ],
+    "BASE_SUPPLY": [
+      10,
+      10,
+      10
+    ],
+    "BUFFER": [
+      2,
+      2,
+      2
+    ],
+    "SHOCK_PROB": {
+      "-5": 0.014839776942504374,
+      "-4": 0.036499961536658916,
+      "-3": 0.07350189636701515,
+      "-2": 0.12118413997709437,
+      "-1": 0.16358147868660403,
+      "0": 0.18078549298024618,
+      "1": 0.16358147868660403,
+      "2": 0.12118413997709437,
+      "3": 0.07350189636701515,
+      "4": 0.036499961536658916,
+      "5": 0.014839776942504374
+    }
+  },
+  "ICConfig": {
+    "SAMPLES": 50,
+    "SEED": 42,
+    "MAX_PROFILES": null,
+    "OUTPUT_BASE_DIR": "results"
+  },
+  "n_truth": 216,
+  "n_typeCx": 720,
+  "note": "Fast TypeCx: precompute E[alloc] for (Cx,truth) and (truth,Cx); best response via dot products."
+}
